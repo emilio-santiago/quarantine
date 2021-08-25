@@ -1,7 +1,6 @@
 # typed: strict
 
 require 'optparse'
-require 'sorbet-runtime'
 require_relative 'databases/base'
 require_relative 'databases/dynamo_db'
 

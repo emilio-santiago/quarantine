@@ -31,6 +31,10 @@ class Quarantine
           @options[:region] = region
         end
 
+        parser.on('-eENDPOINT', '--endpoint=ENDPOINT', String, 'Specify the aws endpoint for DynamoDB') do |endpoint|
+          @options[:endpoint] = endpoint
+        end
+
         parser.on(
           '-qTABLE',
           '--quarantine_table=TABLE',
@@ -56,7 +60,9 @@ class Quarantine
     # TODO: eventually move to a separate file & create_table by db type when my db adapters
     sig { void }
     def create_tables
-      dynamodb = Quarantine::Databases::DynamoDB.new(region: @options[:region])
+
+      dynamodb_params = @options.slice(:region, :endpoint).compact
+      dynamodb = Quarantine::Databases::DynamoDB.new(dynamodb_params)
 
       attributes = [
         { attribute_name: 'id', attribute_type: 'S', key_type: 'HASH' }
